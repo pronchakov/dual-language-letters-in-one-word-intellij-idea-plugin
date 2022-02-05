@@ -1,16 +1,16 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.pronchakov.dual-language-inspector</id>
-    <name>Dual language inspector</name>
+    <id>com.github.pronchakov.mixed-languages-detector</id>
+    <name>Mixed languages detector</name>
     <vendor>pronchakov</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <localInspection
-                implementationClass="edu.plugin.language.FindDualLanguageInspection"
+                implementationClass="edu.plugin.language.FindMixedLanguagesInspection"
                 enabledByDefault="true"
-                displayName="Find dual language inspection"
+                displayName="Find mixed languages inspection"
                 groupName="Language"
         />
     </extensions>

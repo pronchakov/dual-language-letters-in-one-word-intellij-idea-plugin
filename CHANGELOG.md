@@ -1,6 +1,6 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# dual-language-letters-in-one-word-intellij-idea-plugin Changelog
+# Mixed languages detector Changelog
 
 ## [Unreleased]
 ### Added
