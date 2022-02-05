@@ -1,18 +1,19 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.pronchakov.duallanguagelettersinonewordintellijideaplugin</id>
-    <name>dual-language-letters-in-one-word-intellij-idea-plugin</name>
+    <id>com.github.pronchakov.dual-language-inspector</id>
+    <name>Dual language inspector</name>
     <vendor>pronchakov</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.pronchakov.duallanguagelettersinonewordintellijideaplugin.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.pronchakov.duallanguagelettersinonewordintellijideaplugin.services.MyProjectService"/>
+        <localInspection
+                implementationClass="edu.plugin.language.FindDualLanguageInspection"
+                enabledByDefault="true"
+                displayName="Find dual language inspection"
+                groupName="Language"
+        />
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.pronchakov.duallanguagelettersinonewordintellijideaplugin.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+    <applicationListeners/>
 </idea-plugin>
