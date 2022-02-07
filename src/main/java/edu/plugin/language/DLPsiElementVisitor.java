@@ -6,6 +6,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiLiteralValue;
+import edu.plugin.language.lang.Language;
+import edu.plugin.language.lang.LanguagesFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -39,12 +41,11 @@ public class DLPsiElementVisitor extends PsiElementVisitor {
     private Result groupLettersByLanguage(String word) {
         final var letters = word.toCharArray();
         final var result = new Result(word);
-        final var languages = Language.values();
-        for (var i = 0; i < letters.length; i++) {
-            final var letter = letters[i];
+        final var languages = LanguagesFactory.getRegisteredLanguages();
+        for (char letter: letters) {
             for (Language language : languages) {
                 if ((letter >= language.getFirstLower() && letter <= language.getLastLower()) || (letter >= language.getFirstUpper() && letter <= language.getLastUpper())) {
-                    result.set(i, language);
+                    result.set(language);
                     break;
                 }
             }
@@ -53,11 +54,11 @@ public class DLPsiElementVisitor extends PsiElementVisitor {
     }
 
     private boolean hasDifferentLanguages(Result result) {
-        final var letters = result.getLetters();
-        final var firstLetter = letters[0];
-        for (int i = 1; i < letters.length; i++) {
-            final var nextLetter = letters[i];
-            if (nextLetter != null && !Objects.equals(firstLetter, nextLetter)) {
+        final var letterLanguages = result.getLetters();
+        final var firstLetterLanguage = letterLanguages.get(0);
+        for (int i = 1; i < letterLanguages.size(); i++) {
+            final var nextLetterLanguage = letterLanguages.get(i);
+            if (nextLetterLanguage != null && !Objects.equals(firstLetterLanguage, nextLetterLanguage)) {
                 return true;
             }
         }
@@ -66,13 +67,13 @@ public class DLPsiElementVisitor extends PsiElementVisitor {
 
     private void highlightWord(PsiElement element, int wordPosition, Result result) {
         final var augmentedWord = new StringBuilder();
-        final var letters = result.getLetters();
-        final var chars = result.getWord().toCharArray();
-        for (int i = 0; i < letters.length; i++) {
-            augmentedWord.append(chars[i]);
+        final var letterLanguages = result.getLetters();
+        final var letters = result.getWord().toCharArray();
+        for (int i = 0; i < letterLanguages.size(); i++) {
+            augmentedWord.append(letters[i]);
             augmentedWord.append("(");
-            if (letters[i] != null) {
-                augmentedWord.append(letters[i].getTitle());
+            if (letterLanguages.get(i) != null) {
+                augmentedWord.append(letterLanguages.get(i).getName());
             }
             augmentedWord.append(")");
         }
@@ -80,7 +81,7 @@ public class DLPsiElementVisitor extends PsiElementVisitor {
                 element,
                 "Word contains letters from different languages: " + augmentedWord,
                 ProblemHighlightType.GENERIC_ERROR,
-                TextRange.from(wordPosition, chars.length)
+                TextRange.from(wordPosition, letters.length)
         );
     }
 
