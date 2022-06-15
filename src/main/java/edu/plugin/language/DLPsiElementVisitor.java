@@ -28,6 +28,9 @@ public class DLPsiElementVisitor extends PsiElementVisitor {
             return;
         }
         final var rawText = element.getText();
+        if (rawText.length() == 0 || rawText.isBlank() || !rawText.startsWith("\"") || "\"\"".equals(rawText)) {
+            return;
+        }
         final var text = rawText.substring(1, rawText.length() - 1);
         for (String word : pattern.split(text)) {
             final var wordPosition = rawText.indexOf(word);
@@ -55,6 +58,9 @@ public class DLPsiElementVisitor extends PsiElementVisitor {
 
     private boolean hasDifferentLanguages(Result result) {
         final var letterLanguages = result.getLetters();
+        if (letterLanguages.isEmpty()) {
+            return false;
+        }
         final var firstLetterLanguage = letterLanguages.get(0);
         for (int i = 1; i < letterLanguages.size(); i++) {
             final var nextLetterLanguage = letterLanguages.get(i);
